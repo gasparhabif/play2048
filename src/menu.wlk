@@ -4,7 +4,7 @@ import juego.*
 object menu {
 
 	method principal() {
-		// game.boardGround("fondo2.jpg")
+		game.boardGround("assets/fondos/tablero.png")
 		configMenu.teclasMenuPrincipal()
 		configMenu.iniciarMusica()
 	}

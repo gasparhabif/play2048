@@ -9,19 +9,25 @@ const IZQ = "IZQ"
 
 const DER = "DER"
 
+const EN_JUEGO = 0
+
+const PERDIO = 1
+
+const GANO = 2
+
 object tablero {
 
 	const bloques = []
-	var property perdio = false
+	var property estado = EN_JUEGO
 
 	method agregarBloque(bloque) {
-		if (!perdio) {
+		if (self.estado() == EN_JUEGO) {
 			bloque.position(self.espacioLibreAlAzar())
 			bloque.setValorAlAzar()
 			bloques.add(bloque)
 			game.addVisual(bloque)
 		} else {
-			perdio = true
+			estado = PERDIO
 			bloques.forEach({ b => game.say(b, "PERDIIIII")})
 		}
 	}
@@ -39,6 +45,10 @@ object tablero {
 					game.removeVisual(otroBloque)
 					bloques.remove(otroBloque)
 					bloque.incrementar()
+					if (bloque.valor() == 2048) {
+						game.say(bloque, "Wii gane")
+						estado = GANO
+					}
 				} else {
 					game.say(bloque, "No hay movimientos posibles")
 				}
@@ -66,7 +76,7 @@ object tablero {
 	method espacioLibreAlAzar() {
 		const posRandom = game.at((0 .. 3).anyOne(), (0 .. 3).anyOne())
 		if (self.tableroCompleto()) {
-			perdio = true
+			estado = PERDIO
 			return game.origin()
 		} else {
 			if (self.hayBloqueEnPos(posRandom)) {
