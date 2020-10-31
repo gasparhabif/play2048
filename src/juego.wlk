@@ -6,8 +6,6 @@ object juego {
 
 	method iniciar() {
 		tablero.agregarBloque(new Bloque())
-		tablero.agregarBloque(new Bloque(valor = 1024))
-		tablero.agregarBloque(new Bloque(valor = 1024))
 		configJuego.teclado()
 	}
 

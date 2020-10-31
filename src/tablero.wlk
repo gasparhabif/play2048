@@ -22,19 +22,23 @@ object tablero {
 
 	method agregarBloque(bloque) {
 		if (self.estado() == EN_JUEGO) {
-			bloque.position(self.espacioLibreAlAzar())
+			bloque.position(self.espacioLibreAlAzar(#{}))
 			bloque.setValorAlAzar()
 			bloques.add(bloque)
 			game.addVisual(bloque)
-		} else {
-			estado = PERDIO
-			bloques.forEach({ b => game.say(b, "PERDIIIII")})
 		}
 	}
 
 	method moverBloques(sentido) {
-		bloques.forEach({ bloque => self.combinarBloques(bloque, sentido)})
+		if (self.algunBloquePuedeMoverse(sentido)) {
+			bloques.forEach({ bloque => self.combinarBloques(bloque, sentido)})
+		} else {
+			bloques.forEach({ b => game.say(b, "Perdimos :(")})
+			estado = PERDIO
+		}
 	}
+
+	method algunBloquePuedeMoverse(sentido) = bloques.any({ bloque => bloque.puedeMoverA(self.calcularPosicionFutura(bloque, sentido), bloques) })
 
 	method combinarBloques(bloque, sentido) {
 		const posFutura = self.calcularPosicionFutura(bloque, sentido)
@@ -49,8 +53,6 @@ object tablero {
 						game.say(bloque, "Wii gane")
 						estado = GANO
 					}
-				} else {
-					game.say(bloque, "No hay movimientos posibles")
 				}
 			})
 		}
@@ -73,17 +75,23 @@ object tablero {
 
 	method hayBloqueEnPos(pos) = bloques.any({ bloque => bloque.coincidePosicion(pos) })
 
-	method espacioLibreAlAzar() {
+	method espacioLibreAlAzar(yaSalieron) {
 		const posRandom = game.at((0 .. 3).anyOne(), (0 .. 3).anyOne())
-		if (self.tableroCompleto()) {
-			estado = PERDIO
-			return game.origin()
-		} else {
-			if (self.hayBloqueEnPos(posRandom)) {
-				return self.espacioLibreAlAzar()
+		if (!yaSalieron.contains(posRandom)) {
+			yaSalieron.add(posRandom)
+			if (self.tableroCompleto()) {
+				estado = PERDIO
+				bloques.forEach({ b => game.say(b, "Perdimos :(")})
+				return game.origin()
 			} else {
-				return posRandom
+				if (self.hayBloqueEnPos(posRandom)) {
+					return self.espacioLibreAlAzar(yaSalieron)
+				} else {
+					return posRandom
+				}
 			}
+		} else {
+			return self.espacioLibreAlAzar(yaSalieron)
 		}
 	}
 
