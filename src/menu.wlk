@@ -5,9 +5,8 @@ object menu {
 
 	method principal() {
 		game.boardGround("assets/fondos/tablero.png")
-//		game.boardGround("assets/fondos/GIF-creado-WEB.gif")
 		configMenu.teclasMenuPrincipal()
-		configMenu.iniciarMusica()
+		configMenu.iniciarFondoDinamico()
 	}
 
 	method configuracion() {
@@ -19,7 +18,9 @@ object menu {
 object configMenu {
 
 	method teclasMenuPrincipal() {
-		keyboard.s().onPressDo({ juego.iniciar()})
+		keyboard.s().onPressDo({ juego.iniciar()
+			self.pararFondoDinamico()
+		})
 		keyboard.c().onPressDo({ menu.configuracion()})
 	}
 
@@ -27,9 +28,33 @@ object configMenu {
 		keyboard.m().onPressDo({ menu.principal()})
 	}
 
-	method iniciarMusica() {
-//		sound.play()
-//		sound.shouldLoop(true)		
+	method iniciarFondoDinamico() {
+		game.addVisual(fondoDinamico)
+		game.onTick(750, "fondoItermitente", { fondoDinamico.cambiar()})
+	}
+
+	method pararFondoDinamico() {
+		game.removeVisual(fondoDinamico)
+		game.removeTickEvent("fondoItermitente")
+	}
+
+}
+
+object fondoDinamico {
+
+	var property position = game.origin()
+	var property flash = false
+	var property imagen = "assets/fondos/background.png"
+
+	method image() = imagen
+
+	method cambiar() {
+		if (flash) {
+			self.imagen("assets/fondos/background.png")
+		} else {
+			self.imagen("assets/fondos/background-flash.png")
+		}
+		self.flash(!flash)
 	}
 
 }
