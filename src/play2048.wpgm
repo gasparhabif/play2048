@@ -3,7 +3,7 @@ import menu.*
 
 program play2048 {
 	game.title("2048")
-	game.cellSize(120)
+	game.cellSize(125)
 	game.height(4)
 	game.width(4)
 	menu.principal()

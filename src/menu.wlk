@@ -5,6 +5,7 @@ object menu {
 
 	method principal() {
 		game.boardGround("assets/fondos/tablero.png")
+//		game.boardGround("assets/fondos/GIF-creado-WEB.gif")
 		configMenu.teclasMenuPrincipal()
 		configMenu.iniciarMusica()
 	}
