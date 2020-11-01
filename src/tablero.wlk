@@ -22,7 +22,7 @@ object tablero {
 
 	method agregarBloque(bloque) {
 		if (self.estado() == EN_JUEGO) {
-			// bloque.position(self.espacioLibreAlAzar(#{}))
+			bloque.position(self.espacioLibreAlAzar(#{}))
 			bloque.setValorAlAzar()
 			bloques.add(bloque)
 			game.addVisual(bloque)

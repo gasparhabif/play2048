@@ -9,10 +9,6 @@ object menu {
 		configMenu.iniciarFondoDinamico()
 	}
 
-	method configuracion() {
-		configMenu.teclasConfiguracion()
-	}
-
 }
 
 object configMenu {
@@ -21,11 +17,6 @@ object configMenu {
 		keyboard.s().onPressDo({ juego.iniciar()
 			self.pararFondoDinamico()
 		})
-		keyboard.c().onPressDo({ menu.configuracion()})
-	}
-
-	method teclasConfiguracion() {
-		keyboard.m().onPressDo({ menu.principal()})
 	}
 
 	method iniciarFondoDinamico() {
