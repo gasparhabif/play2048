@@ -1,0 +1,47 @@
+import tablero.*
+import bloque.*
+import wollok.game.*
+
+describe "Tests del Tablero" {
+
+	const bloque = new Bloque(position = game.at(1, 1))
+
+	test "Al agregar un bloque la cantidad de bloques se incrementa en 1" {
+		tablero.agregarBloque(bloque)
+		assert.equals(1, tablero.bloques().size())
+	}
+
+	test "La posicion futura de un bloque en sentido derecha es la misma incrementada su posicion de X en 1" {
+		const posFutura = game.at(2, 1)
+		assert.equals(posFutura, tablero.calcularPosicionFutura(bloque, DER))
+	}
+
+	test "La posicion futura de un bloque en sentido izquierda es la misma disminuida su posicion de X en 1" {
+		const posFutura = game.at(0, 1)
+		assert.equals(posFutura, tablero.calcularPosicionFutura(bloque, IZQ))
+	}
+
+	test "La posicion futura de un bloque en sentido arriba es la misma incrementada su posicion de Y en 1" {
+		const posFutura = game.at(1, 2)
+		assert.equals(posFutura, tablero.calcularPosicionFutura(bloque, ARR))
+	}
+
+	test "La posicion futura de un bloque en sentido abajo es la misma disminuida su posicion de Y en 1" {
+		const posFutura = game.at(1, 0)
+		assert.equals(posFutura, tablero.calcularPosicionFutura(bloque, ABJ))
+	}
+
+	test "Hay bloque en la posicion (1,1)" {
+		const pos = game.at(1, 1)
+		tablero.bloques().add(bloque)
+		assert.that(tablero.hayBloqueEnPos(pos))
+	}
+
+	test "No hay bloque en la posicion (2,1)" {
+		const pos = game.at(2, 1)
+		tablero.bloques().add(bloque)
+		assert.notThat(tablero.hayBloqueEnPos(pos))
+	}
+
+}
+

@@ -17,7 +17,7 @@ const GANO = 2
 
 object tablero {
 
-	const bloques = []
+	const property bloques = []
 	var property estado = EN_JUEGO
 
 	method agregarBloque(bloque) {
