@@ -1,0 +1,57 @@
+import bloque.*
+import wollok.game.*
+
+describe "Tests de Bloque" {
+
+	const bloque = new Bloque(position = game.at(1, 1), valor = 2)
+
+	test "Al mover un bloque hacia la izquieda, su posicion en X disminuye en 1" {
+		bloque.izquierda()
+		assert.equals(game.at(0, 1), bloque.position())
+	}
+
+	test "Al mover un bloque hacia la derecha, su posicion en X aumenta en 1" {
+		bloque.derecha()
+		assert.equals(game.at(2, 1), bloque.position())
+	}
+
+	test "Al mover un bloque hacia arriba, su posicion en Y aumenta en 1" {
+		bloque.arriba()
+		assert.equals(game.at(1, 2), bloque.position())
+	}
+
+	test "Al mover un bloque hacia abajo, su posicion en Y disminuye 1" {
+		bloque.abajo()
+		assert.equals(game.at(1, 0), bloque.position())
+	}
+
+	test "Al incrementar el valor de un bloque este se duplica" {
+		bloque.incrementar()
+		assert.equals(4, bloque.valor())
+	}
+
+	test "La posicion (1,1) coincide con la posicion del bloque" {
+		const pos = game.at(1, 1)
+		assert.that(bloque.coincidePosicion(pos))
+	}
+
+	test "No puede moverse un bloque a una posicion ya ocupada" {
+		const pos = game.at(2, 2)
+		const bloques = [ new Bloque(position = pos, valor = 1024) ]
+		assert.notThat(bloque.puedeMoverA(pos, bloques))
+	}
+
+	test "Si puede moverse un bloque a una posicion libre" {
+		const pos = game.at(2, 2)
+		const bloques = [ new Bloque(position = game.at(1,2), valor = 1024) ]
+		assert.that(bloque.puedeMoverA(pos, bloques))
+	}
+
+	test "Si puede moverse un bloque a una posicion ocupada pero por un bloque del mismo valor" {
+		const pos = game.at(2, 2)
+		const bloques = [ new Bloque(position = pos, valor = 2) ]
+		assert.that(bloque.puedeMoverA(pos, bloques))
+	}
+
+}
+
