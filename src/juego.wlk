@@ -5,6 +5,7 @@ import tablero.*
 object juego {
 
 	method iniciar() {
+		tablero.popularEspaciosDisponibles()
 		tablero.agregarBloque(new Bloque())
 		configJuego.teclado()
 		configJuego.cheats()

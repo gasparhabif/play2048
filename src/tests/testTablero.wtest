@@ -31,17 +31,5 @@ describe "Tests del Tablero" {
 		assert.equals(posFutura, tablero.calcularPosicionFutura(bloque, ABJ))
 	}
 
-	test "Hay bloque en la posicion (1,1)" {
-		const pos = game.at(1, 1)
-		tablero.bloques().add(bloque)
-		assert.that(tablero.hayBloqueEnPos(pos))
-	}
-
-	test "No hay bloque en la posicion (2,1)" {
-		const pos = game.at(2, 1)
-		tablero.bloques().add(bloque)
-		assert.notThat(tablero.hayBloqueEnPos(pos))
-	}
-
 }
 

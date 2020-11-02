@@ -19,10 +19,23 @@ object tablero {
 
 	const property bloques = []
 	var property estado = EN_JUEGO
+	const property espaciosDisponibles = #{}
+
+	method popularEspaciosDisponibles() {
+		4.times({ x => 4.times({ y => espaciosDisponibles.add(game.at(x - 1, y - 1))})})
+	}
+
+	method ocuparEspacio(espacio) {
+		espaciosDisponibles.remove(espacio)
+	}
+
+	method liberarEspacio(bloque) {
+		espaciosDisponibles.add(bloque.position())
+	}
 
 	method agregarBloque(bloque) {
 		if (self.estado() == EN_JUEGO) {
-			bloque.position(self.espacioLibreAlAzar(#{}))
+			bloque.position(self.espacioLibreAlAzar())
 			bloque.setValorAlAzar()
 			bloques.add(bloque)
 			game.addVisual(bloque)
@@ -30,15 +43,13 @@ object tablero {
 	}
 
 	method moverBloques(sentido) {
-		if (self.algunBloquePuedeMoverse(sentido)) {
+		if (espaciosDisponibles.size() > 0) {
 			bloques.forEach({ bloque => self.combinarBloques(bloque, sentido)})
+			self.refrescarEspacios()
 		} else {
-			bloques.forEach({ b => game.say(b, "Perdimos :(")})
 			estado = PERDIO
 		}
 	}
-
-	method algunBloquePuedeMoverse(sentido) = bloques.any({ bloque => bloque.puedeMoverA(self.calcularPosicionFutura(bloque, sentido), bloques) })
 
 	method combinarBloques(bloque, sentido) {
 		const posFutura = self.calcularPosicionFutura(bloque, sentido)
@@ -46,16 +57,20 @@ object tablero {
 			self.moverEnSentido(bloque, sentido)
 			game.whenCollideDo(bloque, { otroBloque =>
 				if (bloque.valor() == otroBloque.valor()) {
-					game.removeVisual(otroBloque)
-					bloques.remove(otroBloque)
+					self.eliminarBloque(otroBloque)
 					bloque.incrementar()
 					if (bloque.valor() == 2048) {
-						game.say(bloque, "Wii gane")
 						estado = GANO
 					}
 				}
 			})
 		}
+	}
+
+	method eliminarBloque(bloque) {
+		game.removeVisual(bloque)
+		self.liberarEspacio(bloque)
+		bloques.remove(bloque)
 	}
 
 	method calcularPosicionFutura(bloque, sentido) {
@@ -67,39 +82,29 @@ object tablero {
 	}
 
 	method moverEnSentido(bloque, sentido) {
+		self.liberarEspacio(bloque)
 		if (sentido == ARR) bloque.arriba()
 		if (sentido == ABJ) bloque.abajo()
 		if (sentido == DER) bloque.derecha()
 		if (sentido == IZQ) bloque.izquierda()
+		self.ocuparEspacio(bloque.position())
 	}
 
-	method hayBloqueEnPos(pos) = bloques.any({ bloque => bloque.coincidePosicion(pos) })
+	method refrescarEspacios() {
+		espaciosDisponibles.removeAll(espaciosDisponibles)
+		self.popularEspaciosDisponibles()
+		bloques.forEach({ bloque => espaciosDisponibles.remove(bloque.position())})
+	}
 
-	method espacioLibreAlAzar(yaSalieron) {
-		const posRandom = game.at((0 .. 3).anyOne(), (0 .. 3).anyOne())
-		if (!yaSalieron.contains(posRandom)) {
-			yaSalieron.add(posRandom)
-			if (self.tableroCompleto()) {
-				estado = PERDIO
-				bloques.forEach({ b => game.say(b, "Perdimos :(")})
-				return game.origin()
-			} else {
-				if (self.hayBloqueEnPos(posRandom)) {
-					return self.espacioLibreAlAzar(yaSalieron)
-				} else {
-					return posRandom
-				}
-			}
+	method espacioLibreAlAzar() {
+		if (espaciosDisponibles.size() > 0) {
+			const espacio = espaciosDisponibles.anyOne()
+			self.ocuparEspacio(espacio)
+			return espacio
 		} else {
-			return self.espacioLibreAlAzar(yaSalieron)
+			estado = PERDIO
+			return game.origin()
 		}
-	}
-
-	method tableroCompleto() {
-		4.times({ x => 4.times({ y =>
-			if (self.hayBloqueEnPos(game.at(x - 1, y - 1))) return true
-		})})
-		return false
 	}
 
 }
