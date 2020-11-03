@@ -55,16 +55,20 @@ object tablero {
 		const posFutura = self.calcularPosicionFutura(bloque, sentido)
 		if (bloque.puedeMoverA(posFutura, bloques)) {
 			self.moverEnSentido(bloque, sentido)
-			game.whenCollideDo(bloque, { otroBloque =>
-				if (bloque.valor() == otroBloque.valor()) {
-					self.eliminarBloque(otroBloque)
-					bloque.incrementar()
-					if (bloque.valor() == 2048) {
-						estado = GANO
-					}
-				}
-			})
+			self.comprobarColisiones(bloque)
 		}
+	}
+
+	method comprobarColisiones(bloque) {
+		game.whenCollideDo(bloque, { otroBloque =>
+			if (bloque.valor() == otroBloque.valor()) {
+				self.eliminarBloque(otroBloque)
+				bloque.incrementar()
+				if (bloque.valor() == 2048) {
+					estado = GANO
+				}
+			}
+		})
 	}
 
 	method eliminarBloque(bloque) {
