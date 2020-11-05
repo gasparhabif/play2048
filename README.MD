@@ -13,8 +13,8 @@ Los cubos con el mismo valor se suman!
 
 ![LosingDemostration](assets/gifs/LosingCMP.gif)
 
-#### [Juego en el que está basado: ](https://play2048.co/)
+#### [Link al juego en el que está basado](https://play2048.co/)
 
 #### Desarrollo: Grupo PampaDePaso
 - Franco Crivaro (francocrivaro)
-- Gaspar Habig (gasparhabif)
+- Gaspar Habif (gasparhabif)
