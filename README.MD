@@ -1,7 +1,4 @@
 # Juego 2048 versión Wollok Game
-## Demostración
-
-![GameDemostration]()
 
 ### Sobre el juego:
 - Objetivo: Sumar los cubos hasta llegar a 2048.
@@ -10,14 +7,13 @@ Los cubos con el mismo valor se suman!
 
 ### Ganando
 
-![WinningDemostration]()
+![WinningDemostration](assets/gifs/WinningCMP.gif)
 
 ### Perdiendo
 
-![LosingDemostration]()
+![LosingDemostration](assets/gifs/LosingCMP.gif)
 
-#### Juego en el que está basado
-(https://play2048.co/)
+#### ![Juego en el que está basado: ](https://play2048.co/)
 
 #### Desarrollo: Grupo PampaDePaso
 - Franco Crivaro (francocrivaro)
